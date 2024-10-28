@@ -1,0 +1,167 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.chat-box {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    height: 80vh;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.member-list {
+    width: 25%;
+    background-color: #282c34;
+    color: white;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.member-list div {
+    margin-bottom: 10px;
+}
+
+.member-list button {
+    width: 100%;
+    padding: 10px;
+    background: none;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: left;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.member-list button.active, .member-list button:hover {
+    background-color: #4CAF50;
+}
+
+.chat-content {
+    width: 75%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-left: 1px solid #ccc;
+}
+
+.chat-message {
+    padding: 0;
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.message-left {
+    justify-content: flex-start;
+}
+
+.message-right {
+    justify-content: flex-end;
+}
+
+.avatar {
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.message-data {
+    font-size: 14px;
+    color: black;
+    max-width: 60%;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #f0f0f0;
+    margin-left: 10px;
+}
+
+.self {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.send-message {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.input-message {
+    width: 85%;
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    background-color: #f0f0f0;
+    outline: none;
+}
+
+.send-button {
+    width: 10%;
+    padding: 10px;
+    border-radius: 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.send-button:hover {
+    background-color: #45a049;
+}
+
+.register {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.register input {
+    padding: 10px;
+    width: 50%;
+    margin-bottom: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+
+.register button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.register button:hover {
+    background-color: #45a049;
+}
+

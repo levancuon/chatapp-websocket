@@ -1,0 +1,87 @@
+Phần logic giao diện của ứng dụng này có nhiệm vụ hiển thị các thành phần giao diện (UI) dựa vào trạng thái của ứng dụng và người dùng. Giao diện bao gồm một form đăng nhập đơn giản, khung chat chung, và các phần dành cho chat riêng. Dưới đây là chi tiết từng phần:
+
+1. Kiểm tra kết nối của người dùng
+Biến userData.connected kiểm tra xem người dùng đã kết nối với WebSocket hay chưa.
+
+Nếu userData.connected === false: Hiển thị form đăng nhập để người dùng nhập tên username.
+Nếu userData.connected === true: Hiển thị giao diện phòng chat, bao gồm danh sách các thành viên và khung chat.
+
+2. Giao diện đăng nhập
+Nếu người dùng chưa kết nối, component register sẽ hiển thị:
+
+<div className='register'>
+    <input id='user-name' name='username' placeholder='Enter the username' value={userData.username} onChange={handleValue} />
+    <button type='button' onClick={registerUser}>Connect</button>
+</div>
+
+Input username: Cho phép người dùng nhập tên, khi nhập sẽ cập nhật giá trị vào userData.username qua hàm handleValue.
+Button Connect: Kết nối với server WebSocket khi bấm vào. Hàm registerUser được gọi để khởi tạo kết nối và kích hoạt client STOMP.
+
+3. Giao diện phòng chat (sau khi kết nối thành công)
+Khi người dùng đã kết nối, phần chat-box được hiển thị với cấu trúc gồm:
+
+Danh sách các thành viên.
+Khung chat chính (có thể là chat chung hoặc chat riêng).
+a. Danh sách thành viên (member-list)
+
+<div className='member-list'>
+    <ul>
+        <li onClick={() => setTab("CHATROOM")} className={`member ${tab === "CHATROOM" && "active"}`}>Chatroom</li>
+        {[...privateChats.keys()].map((name, index) => (
+            <li onClick={() => setTab(name)} className={`member ${tab === name && "active"}`} key={index}>
+                {name}
+            </li>
+        ))}
+    </ul>
+</div>
+
+setTab("CHATROOM"): Khi người dùng nhấp vào "Chatroom", tab được đặt thành "CHATROOM", hiển thị chat chung.
+Danh sách người dùng (privateChats.keys()): Hiển thị mỗi người dùng mà bạn có cuộc trò chuyện riêng.
+Khi nhấp vào tên, tab sẽ được cập nhật với tên người dùng đó, chuyển sang hiển thị chat riêng với người dùng tương ứng.
+b. Khung chat (chat-content)
+Phần nội dung chat hiển thị khác nhau tùy vào giá trị của tab:
+
+Nếu tab === "CHATROOM": Hiển thị tin nhắn chung.
+Nếu tab là tên một người dùng: Hiển thị tin nhắn riêng với người đó.
+Chat chung (Public Chat)
+
+<div className='chat-content'>
+    <ul className='chat-message'>
+        {publicChats.map((chat, index) => (
+            <li className='message' key={index}>
+                {chat.senderName !== userData.username && <div className="avatar">{chat.senderName}</div>}
+                <div className="message-data">{chat.message}</div>
+                {chat.senderName === userData.username && <div className="avatar self">{chat.senderName}</div>}
+            </li>
+        ))}
+    </ul>
+    <div className='send-message'>
+        <input type="text" className='input-message' name='message' placeholder='Enter public message' value={userData.message} onChange={handleValue} />
+        <button type='button' className='send-button' onClick={sendPublicMessage}>Send</button>
+    </div>
+</div>
+
+Danh sách tin nhắn (publicChats): Hiển thị các tin nhắn từ publicChats bằng cách duyệt qua danh sách và render các tin nhắn.
+Mỗi tin nhắn sẽ hiển thị tên người gửi (avatar) và nội dung (message-data).
+Nếu tin nhắn được gửi bởi người dùng hiện tại (userData.username), hiển thị với định dạng đặc biệt (avatar self).
+Input và Button gửi tin nhắn: Nhập và gửi tin nhắn mới trong chat chung bằng cách gọi hàm sendPublicMessage.
+Chat riêng (Private Chat)
+
+<div className='chat-content'>
+    <ul className='chat-message'>
+        {[...privateChats.get(tab)].map((chat, index) => (
+            <li className='message' key={index}>
+                {chat.senderName !== userData.username && <div className="avatar">{chat.senderName}</div>}
+                <div className="message-data">{chat.message}</div>
+                {chat.senderName === userData.username && <div className="avatar self">{chat.senderName}</div>}
+            </li>
+        ))}
+    </ul>
+    <div className='send-message'>
+        <input type="text" className='input-message' name='message' placeholder={`Enter private message for ${tab}`} value={userData.message} onChange={handleValue} />
+        <button type='button' className='send-button' onClick={sendPrivateMessage}>Send</button>
+    </div>
+</div>
+
+Danh sách tin nhắn riêng (privateChats.get(tab)): Nếu người dùng đang ở một tab chat riêng, duyệt qua danh sách tin nhắn riêng và hiển thị mỗi tin nhắn.
+Input và Button gửi tin nhắn riêng: Gửi tin nhắn đến người dùng đang trò chuyện bằng cách gọi sendPrivateMessage.
